@@ -1,0 +1,26 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+<div class="reg">
+<h2>ログイン画面</h2>
+
+<form method="post" action="{% url 'Login' %}">
+{% csrf_token %}
+<table class="reg_form">
+<tr>
+<td><label for="userid">ユーザーID：</label></td>
+<td><input type="text" name="userid"></td>
+</tr>
+<tr>
+<td><label for="password">パスワード：</label></td>
+<td><input type="password" name="password"></td>
+</tr>
+<tr><td></td><td></td></tr>
+<tr><td></td><td>
+<input type="submit" class="btn" value="Login">
+</td></tr>
+</table>
+</form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+{% if AccountCreate %}
+<div class="reg">
+<h2><a href="/">登録完了</a></h2>
+</div>
+
+{% else %}
+<div class="reg">
+<h2>新規登録</h2>
+<table class="reg_form">
+
+<form enctype="multipart/form-data" method="post">
+{% csrf_token %}
+{{ account_form.as_table }}
+<tr><td></td><td>
+<input class="btn" type="submit" name="" value="登録">
+</td></tr>
+</form>
+
+</table>
+</div>
+{% endif %}
+{% endblock %}
+

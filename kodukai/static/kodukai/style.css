@@ -1,0 +1,33 @@
+.page-header {
+    background-color: #00FFFF;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #000000;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
+body {
+    padding-left: 15px;
+}
+
+.reg_form{
+    border-spacing: 10px 30px;
+    padding-left: 20px;
+}
+
+.btn{
+    color: #fff;
+    background-color: #000033;
+    font-size: 1.0em;
+    padding: 10px 30px;
+    margin-left: 80%;
+}
+
+.btn:hover{
+    color: #fff;
+    background: #000099;
+}

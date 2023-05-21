@@ -1,0 +1,9 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+<h2>{{ UserID }}さん、ようこそ！！</h2>
+<p>ログアウトは
+<a href="{% url 'Logout' %}">こちら</a>
+</p>
+{% endblock %}
+

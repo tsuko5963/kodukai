@@ -26,3 +26,4 @@ class Treasurer(models.Model):
 
 class ValidDate(models.Model):
     valid_date = models.DateTimeField()
+
