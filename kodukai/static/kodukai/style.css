@@ -31,3 +31,67 @@ body {
     color: #fff;
     background: #000099;
 }
+
+.syukei {
+    table-layout: fixed;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+}
+
+.pk {
+    table-layout: fixed;
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+}
+
+.date {
+    table-layout: fixed;
+    width: 120px;
+    text-align: center;
+    padding: 5px;
+}
+
+.item {
+    table-layout: fixed;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+}
+
+.debit {
+    table-layout: fixed;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+}
+
+.credit {
+    table-layout: fixed;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+}
+
+.amount {
+    table-layout: fixed;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+}
+
+.center {
+    text-align: center;
+}
+
+.reg_table {
+    border-spacing: 10px;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
+}

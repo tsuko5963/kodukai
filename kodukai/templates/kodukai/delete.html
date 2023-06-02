@@ -1,0 +1,11 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+<h2>レコードの削除</h2>
+<form action="" method="post">
+{% csrf_token %}
+<p>削除します。よろしいですか？</p>
+<button type="submit" name="button">削除する</button>
+</form>
+{% endblock %}
+

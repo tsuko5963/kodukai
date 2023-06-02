@@ -1,0 +1,12 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+<h2>レコード詳細</h2>
+<p>項目：{{ treasurer.item }}</p>
+<p>デビット：{{ treasurer.debit }}</p>
+<p>クレジット：{{ treasurer.credit }}</p>
+<p>金額：{{ treasurer.amount }}</p>
+<a href="{% url 'edit_view' treasurer.id %}">変更</a>
+<a href="{% url 'Delete' treasurer.id %}">削除</a>
+{% endblock %}
+

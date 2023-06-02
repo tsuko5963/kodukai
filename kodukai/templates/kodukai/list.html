@@ -1,0 +1,22 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+{% if latest_treasurer_list  %}
+<table border="1">
+<tr><th class="center">pk</th><th class="center">使用日</th><th class="center">項目</th><th class="center">デビット</th><th class="center">クレジット</th><th class="center">金額</th></tr>
+{% for row in latest_treasurer_list %}
+<tr>
+<td class="pk"><a href="{% url 'detail_view' row.id %}">{{ row.id }}</a></td>
+<td class="date">{{ row.use_date }}</td>
+<td class="item">{{ row.item }}</td>
+<td class="debit">{{ row.debit }}</td>
+<td class="credit">{{ row.credit }}</td>
+<td class="amount">{{ row.amount }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No treasurers</P>
+{% endif %}
+{% endblock %}
+
