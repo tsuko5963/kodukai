@@ -2,21 +2,22 @@
 
 {% block content %}
 <h2>{{ UserID }}さん、ようこそ！！</h2>
+<p>{{ 年 }}年{{ 月 }}月の集計</p>
 <table border="1">
 <tr>
-<td class="syukei">銀行</td><td class="syukei">{{ b }}</td><td class="syukei">{{ c }}</td><td class="syukei">カード</td>
+<td class="syukei">銀行</td><td class="syukei">{{ 銀行 }}</td><td class="syukei">{{ カード }}</td><td class="syukei">カード</td>
 </tr>
 <tr>
-<td class="syukei">現金</td><td class="syukei">{{ g }}</td><td class="syukei">{{ d }}</td><td class="syukei">借金</td>
+<td class="syukei">現金</td><td class="syukei">{{ 現金 }}</td><td class="syukei">{{ 借金 }}</td><td class="syukei">借金</td>
 </tr>
 <tr>
-<td class="syukei">スイカ</td><td class="syukei">{{ s }}</td><td class="syukei">{{ k }}</td><td class="syukei">小遣い</td>
+<td class="syukei">スイカ</td><td class="syukei">{{ スイカ }}</td><td class="syukei">{{ 小遣い }}</td><td class="syukei">小遣い</td>
 </tr>
 <tr>
-<td class="syukei">立替</td><td class="syukei">{{ t }}</td><td class="syukei">{{ u }}</td><td class="syukei">引当金</td>
+<td class="syukei">立替</td><td class="syukei">{{ 立替 }}</td><td class="syukei">{{ 引当金 }}</td><td class="syukei">引当金</td>
 </tr>
 <tr>
-<td class="syukei">ペイペイ</td><td class="syukei">{{ p }}</td><td class="syukei">　</td><td class="syukei">　</td>
+<td class="syukei">ペイペイ</td><td class="syukei">{{ ペイペイ }}</td><td class="syukei">　</td><td class="syukei">　</td>
 </tr>
 </table>
 <p>ログアウトは

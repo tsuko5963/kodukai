@@ -1,0 +1,14 @@
+{% extends 'kodukai/base.html' %}
+
+{% block content %}
+<h2>月締め処理</h2>
+<form action="" method="post">
+{% csrf_token %}
+<p>月締め処理を行ってもよろしいですか？</p>
+<button type="submit" name="button">実行する</button>
+</form>
+<p>キャンセルは
+<a href="{% url 'home' %}">こちら</a>
+</p>
+{% endblock %}
+

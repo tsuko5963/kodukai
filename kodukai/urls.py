@@ -6,6 +6,7 @@ urlpatterns = [
     path('logout', views.Logout, name = 'Logout'),
     path('register', views.register, name='register'),
     path('home', views.home, name = 'home'),
+    path('close', views.close_month, name = 'close_month'),
     path('insert', views.insert, name = 'Insert'),
     path('list', views.RecordIndexView.as_view(), name = 'List'),
     path('<int:record_id>/detail/', views.detail_view, name = 'detail_view'),

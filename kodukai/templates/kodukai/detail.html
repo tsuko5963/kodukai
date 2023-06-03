@@ -2,11 +2,25 @@
 
 {% block content %}
 <h2>レコード詳細</h2>
-<p>項目：{{ treasurer.item }}</p>
-<p>デビット：{{ treasurer.debit }}</p>
-<p>クレジット：{{ treasurer.credit }}</p>
-<p>金額：{{ treasurer.amount }}</p>
-<a href="{% url 'edit_view' treasurer.id %}">変更</a>
-<a href="{% url 'Delete' treasurer.id %}">削除</a>
+<table>
+<tr>
+<td>項目：</td><td>{{ treasurer.item }}</td>
+</tr>
+<tr>
+<td>デビット：</td><td>{{ treasurer.debit }}</td>
+</tr>
+<tr>
+<td>クレジット：</td><td>{{ treasurer.credit }}</td>
+</tr>
+<tr>
+<td>金額：</td><td>{{ treasurer.amount }}</td>
+</tr>
+<tr>
+<td><a href="{% url 'edit_view' treasurer.id %}">変更</a></td>
+</tr>
+<tr>
+<td><a href="{% url 'Delete' treasurer.id %}">削除</a></td>
+</tr>
+</table>
 {% endblock %}
 

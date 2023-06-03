@@ -5,19 +5,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class Item(models.Model):
-    item = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.item
-
-class Kanjo(models.Model):
-    kanjo = models.CharField(max_length=1)
-    name = models.CharField(max_length=10)
-
-    def __srt__(self):
-        return self.name
-
 class Treasurer(models.Model):
     ITEM_CHOICES = (
         ('雑収','雑収'),
@@ -34,28 +21,29 @@ class Treasurer(models.Model):
         ('繰越','繰越'),
     )
     KANJO1_CHOICES = (
-        ('b', '銀行'),
-        ('c', 'カード'),
-        ('g', '現金'),
-        ('d', '借金'),
-        ('s', 'スイカ'),
-        ('k', '費用'),
-        ('t', '立替'),
-        ('d', '引当金'),
-        ('p', 'ペイペイ'),
-        ('z', 'ダミー'),
+        ('銀行', '銀行'),
+        ('カード', 'カード'),
+        ('現金', '現金'),
+        ('借金', '借金'),
+        ('スイカ', 'スイカ'),
+        ('費用', '費用'),
+        ('立替', '立替'),
+        ('引当金', '引当金'),
+        ('ペイペイ', 'ペイペイ'),
+        ('ダミー', 'ダミー'),
     )
     KANJO2_CHOICES = (
-        ('b', '銀行'),
-        ('c', 'カード'),
-        ('g', '現金'),
-        ('d', '借金'),
-        ('s', 'スイカ'),
-        ('k', '収入'),
-        ('t', '立替'),
-        ('d', '引当金'),
-        ('p', 'ペイペイ'),
-        ('z', 'ダミー'),
+        ('銀行', '銀行'),
+        ('カード', 'カード'),
+        ('現金', '現金'),
+        ('借金', '借金'),
+        ('スイカ', 'スイカ'),
+        ('収入', '収入'),
+        ('費用', '費用'),
+        ('立替', '立替'),
+        ('引当金', '引当金'),
+        ('ペイペイ', 'ペイペイ'),
+        ('ダミー', 'ダミー'),
     )
     use_date = models.DateField()
     item = models.CharField(
@@ -64,11 +52,11 @@ class Treasurer(models.Model):
         choices=ITEM_CHOICES)
     debit = models.CharField(
         verbose_name = "勘定",
-        max_length=1,
+        max_length=20,
         choices=KANJO1_CHOICES)
     credit = models.CharField(
         verbose_name = "勘定",
-        max_length=1,
+        max_length=20,
         choices=KANJO2_CHOICES)
     amount = models.IntegerField(validators=[MinValueValidator(0),])
 
