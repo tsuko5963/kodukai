@@ -15,6 +15,12 @@
 </tr>
 {% endfor %}
 </table>
+<a href="{% url 'csvexport' %}" class="btn">csv出力</a>
+<form action="{% url 'csvimport' %}" method = 'POST' enctype = "multipart/form-data">
+{% csrf_token %}
+<input type = "file" name = "csv">
+<button type = "submit">送信</button>
+</form>
 {% else %}
 <p>No treasurers</P>
 {% endif %}

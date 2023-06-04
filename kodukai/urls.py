@@ -12,5 +12,7 @@ urlpatterns = [
     path('<int:record_id>/detail/', views.detail_view, name = 'detail_view'),
     path('<int:record_id>/edit/', views.edit_view, name = 'edit_view'),
     path('<int:pk>/delete/', views.RecordDeleteView.as_view(), name = 'Delete'),
+    path('import', views.csvimport, name = 'csvimport'),
+    path('export', views.csvexport, name = 'csvexport'),
 ]
 

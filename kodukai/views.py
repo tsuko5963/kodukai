@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Treasurer, ValidDate
 from datetime import date, timedelta
 import datetime
+import csv, io
 
 def Login(request):
     if request.method == 'POST':
@@ -40,12 +41,12 @@ def Logout(request):
 @login_required
 def home(request):
     params = {"UserID": request.user}
-    start_date = ValidDate.objects.get(key=1).valid_date
+    start_date = ValidDate.objects.get(user=request.user).valid_date
     dt_32 = datetime.timedelta(days=32)
     dt_1 = datetime.timedelta(days=1)
     end_date = start_date + dt_32
     end_date = date(end_date.year, end_date.month, 1) - dt_1
-    treasurer = Treasurer.objects.filter(use_date__range=[start_date,end_date]).values()
+    treasurer = Treasurer.objects.filter(use_date__range=[start_date,end_date] ,user=request.user).values()
     b = 0
     c = 0
     d = 0
@@ -118,8 +119,11 @@ def register(request):
             account = params["account_form"].save()
             account.set_password(account.password)
             account.save()
-    
             params["AccountCreate"] = True
+            today = datetime.date.today()
+            valid_date = date(today.year, today.month, 1)
+            record = ValidDate(key=1, valid_date = valid_date,  user = request.POST.get('username'))
+            record.save()
         else:
             print(params["account_form"].errors)
     
@@ -134,17 +138,20 @@ def insert(request):
     params = {}
     if request.method == 'POST':
         params['record_form'] = RecordForm(data = request.POST)
-        if params['record_form'].is_valid(): 
-            record = params['record_form'].save()
-            record.save()
-            params['RecordCreate'] = True
+        if request.POST.get('user') == str(request.user):
+            if params['record_form'].is_valid(): 
+                record = params['record_form'].save()
+                record.save()
+                params['RecordCreate'] = True
+            else:
+                print(params["record_form"].errors)
         else:
             print(params["record_form"].errors)
         return render(request, "kodukai/insert.html", context = params)
     else:
-        d = ValidDate.objects.get(key=1).valid_date
-        fields = ('use_date', 'item', 'debit', 'credit', 'amount')
-        initial_dict = dict(use_date = d, amount = 0)
+        d = ValidDate.objects.get(user=request.user).valid_date
+        fields = ('use_date', 'item', 'debit', 'credit', 'amount', 'user')
+        initial_dict = dict(use_date = d, amount = 0, user = request.user,)
         params["record_form"] = RecordForm(data = initial_dict)
         params["RecordCreate"] = False
         return render(request, "kodukai/insert.html", context = params)
@@ -154,12 +161,13 @@ class RecordIndexView(LoginRequiredMixin, ListView):
     context_object_name = 'latest_treasurer_list'
     
     def get_queryset(self):
-        start_date = ValidDate.objects.get(key=1).valid_date
+        request_user = self.request.user
+        start_date = ValidDate.objects.get(user=request_user).valid_date
         dt_32 = datetime.timedelta(days=32)
         dt_1 = datetime.timedelta(days=1)
         end_date = start_date + dt_32
         end_date = date(end_date.year, end_date.month, 1) - dt_1
-        return Treasurer.objects.filter(use_date__range=[start_date,end_date]).order_by("use_date")
+        return Treasurer.objects.filter(use_date__range=[start_date,end_date], user=request_user).order_by("use_date")
 
 @login_required
 def detail_view(request, record_id):
@@ -169,13 +177,13 @@ def detail_view(request, record_id):
 @login_required
 def close_month(request):
     if request.method == 'POST':
-        start_date = ValidDate.objects.get(key=1).valid_date
+        start_date = ValidDate.objects.get(user=request.user).valid_date
         dt_32 = datetime.timedelta(days=32)
         dt_1 = datetime.timedelta(days=1)
         end_date = start_date + dt_32
         new_date = date(end_date.year, end_date.month, 1)
         end_date = date(end_date.year, end_date.month, 1) - dt_1
-        treasurer = Treasurer.objects.filter(use_date__range=[start_date,end_date]).values()
+        treasurer = Treasurer.objects.filter(use_date__range=[start_date,end_date], user=request.user).values()
         b = 0
         c = 0
         d = 0
@@ -222,25 +230,25 @@ def close_month(request):
                 u = u + row['amount']
             if row['credit'] == 'ペイペイ':
                 p = p - row['amount']
-        record = Treasurer(use_date = new_date, item = '繰越', debit = '銀行', credit = 'ダミー', amount = b)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = '銀行', credit = 'ダミー', amount = b, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = 'カード', amount = c)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = 'カード', amount = c, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '借金', amount = d)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '借金', amount = d, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = '現金', credit = 'ダミー', amount = g)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = '現金', credit = 'ダミー', amount = g, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '収入', amount = k)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '収入', amount = k, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'スイカ', credit = 'ダミー', amount = s)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'スイカ', credit = 'ダミー', amount = s, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = '立替', credit = 'ダミー', amount = t)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = '立替', credit = 'ダミー', amount = t, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '引当金', amount = u)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ダミー', credit = '引当金', amount = u, user = request.user)
         record.save()
-        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ペイペイ', credit = 'ダミー', amount = p)
+        record = Treasurer(use_date = new_date, item = '繰越', debit = 'ペイペイ', credit = 'ダミー', amount = p, user = request.user)
         record.save()
-        valid_date = ValidDate.objects.get(key=1)
+        valid_date = ValidDate.objects.get(user = request.user)
         valid_date.valid_date = new_date
         valid_date.save()
         return redirect('home')
@@ -264,3 +272,31 @@ class RecordDeleteView(LoginRequiredMixin, DeleteView):
     model = Treasurer
     success_url = reverse_lazy('List')
 
+@login_required
+def csvexport(request):
+    start_date = ValidDate.objects.get(user = request.user).valid_date
+    dt_32 = datetime.timedelta(days=32)
+    dt_1 = datetime.timedelta(days=1)
+    end_date = start_date + dt_32
+    end_date = date(end_date.year, end_date.month, 1) - dt_1
+    treasurer_list = Treasurer.objects.filter(use_date__range=[start_date,end_date], user = request.user).order_by("use_date")
+    response = HttpResponse(content_type = 'text/csv')
+    response['Content-Disposition'] = 'attachment; filname="result.csv"'
+    writer = csv.writer(response)
+    for treasurer in treasurer_list:
+        writer.writerow([treasurer.use_date.strftime('%Y-%m-%d'), treasurer.item, treasurer.debit, treasurer.credit, treasurer.amount])
+    return response
+
+@login_required
+def csvimport(request):
+    if 'csv' in request.FILES:
+        data = io.TextIOWrapper(request.FILES['csv'].file, encoding = 'UTF-8')
+        csv_content = csv.reader(data)
+        for row in csv_content:
+            use_datetime = datetime.datetime.strptime(row[0] + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
+            use_date = datetime.date(use_datetime.year, use_datetime.month, use_datetime.day)
+            record = Treasurer(use_date = row[0], item = row[1], debit = row[2], credit = row[3], amount = row[4], user = request.user)
+            record.save()
+        return redirect('List')
+    else:
+        return redirect('List')

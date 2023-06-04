@@ -59,8 +59,10 @@ class Treasurer(models.Model):
         max_length=20,
         choices=KANJO2_CHOICES)
     amount = models.IntegerField(validators=[MinValueValidator(0),])
+    user = models.CharField(max_length=150,)
 
 class ValidDate(models.Model):
     key = models.IntegerField(default=1)
     valid_date = models.DateField()
+    user = models.CharField(max_length=150,)
 
