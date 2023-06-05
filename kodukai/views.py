@@ -104,6 +104,8 @@ def home(request):
     params["ペイペイ"] = p 
     params["年"] = start_date.year 
     params["月"] = start_date.month 
+    params["デビット計"] = b + g + s + p + t
+    params["クレジット計"] = c + d + k + u
     return render(request, "kodukai/home.html", context = params)
 
 @login_required
