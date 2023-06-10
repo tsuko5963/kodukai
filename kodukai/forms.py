@@ -18,3 +18,14 @@ class RecordForm(forms.ModelForm):
         fields = ('use_date', 'item', 'debit', 'credit', 'amount', 'user')
         labels = {'use_data':'使用日', 'item':'用途', 'debit':'借方', 'credit':'貸方', 'amount':'金額', 'user':'ユーザ名'}
 
+class SearchForm(forms.Form):
+    search_date = forms.DateField(
+        initial = '',
+        label = '日付',
+        required = False,
+    )
+    search_amount = forms.IntegerField(
+        initial = 0,
+        label = '金額',
+        required = False,
+    )

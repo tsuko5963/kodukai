@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from django.views.generic import TemplateView, ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AccountForm, RecordForm
+from .forms import AccountForm, RecordForm, SearchForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -161,15 +161,62 @@ def insert(request):
 class RecordIndexView(LoginRequiredMixin, ListView):
     template_name = "kodukai/list.html"
     context_object_name = 'latest_treasurer_list'
-    
+
+    def post(self, request, *args, **kwargs):
+        form_value = [
+            self.request.POST.get('search_date', None),
+            self.request.POST.get('search_amount', None),
+        ]
+        request.session['form_value'] = form_value
+        self.request.GET = self.request.GET.copy()
+        self.request.GET.clear()
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search_date = ''
+        search_amount = ''
+        if 'form_value' in self.request.session:
+            form_value = self.request.session['form_value']
+            search_date = form_value[0]
+            search_amount = form_value[1]
+        default_data = {'search_date': search_date,
+                        'search_amount': search_amount,
+                        }
+        test_form = SearchForm(initial=default_data)
+        context['test_form'] = test_form
+
+        return context
+ 
     def get_queryset(self):
-        request_user = self.request.user
-        start_date = ValidDate.objects.get(user=request_user).valid_date
-        dt_32 = datetime.timedelta(days=32)
-        dt_1 = datetime.timedelta(days=1)
-        end_date = start_date + dt_32
-        end_date = date(end_date.year, end_date.month, 1) - dt_1
-        return Treasurer.objects.filter(use_date__range=[start_date,end_date], user=request_user).order_by("use_date")
+        if 'form_value' in self.request.session:
+            form_value = self.request.session['form_value']
+            search_date = form_value[0]
+            search_amount = form_value[1]
+            request_user = self.request.user
+            try:
+                start_date = datetime.datetime.strptime(search_date, "%Y-%m-%d")
+                start_date = date(start_date.year, start_date.month, 1)
+                dt_32 = datetime.timedelta(days=32)
+                dt_1 = datetime.timedelta(days=1)
+                end_date = start_date + dt_32
+                end_date = date(end_date.year, end_date.month, 1) - dt_1
+                return Treasurer.objects.filter(use_date__range=[start_date,end_date], amount=search_amount, user=request_user).order_by("use_date")
+            except ValueError:
+                start_date = ValidDate.objects.get(user=request_user).valid_date
+                dt_32 = datetime.timedelta(days=32)
+                dt_1 = datetime.timedelta(days=1)
+                end_date = start_date + dt_32
+                end_date = date(end_date.year, end_date.month, 1) - dt_1
+                return Treasurer.objects.filter(use_date__range=[start_date,end_date], user=request_user).order_by("use_date")
+        else:
+            request_user = self.request.user
+            start_date = ValidDate.objects.get(user=request_user).valid_date
+            dt_32 = datetime.timedelta(days=32)
+            dt_1 = datetime.timedelta(days=1)
+            end_date = start_date + dt_32
+            end_date = date(end_date.year, end_date.month, 1) - dt_1
+            return Treasurer.objects.filter(use_date__range=[start_date,end_date], user=request_user).order_by("use_date")
 
 @login_required
 def detail_view(request, record_id):

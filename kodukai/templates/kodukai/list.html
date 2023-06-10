@@ -1,6 +1,13 @@
 {% extends 'kodukai/base.html' %}
 
 {% block content %}
+<form method="POST" action="{% url 'List' %}">
+{% csrf_token %}
+<table reg_table>
+{{ test_form.as_table }}
+</table>
+<button type = "submit">検索</button>
+</form>
 {% if latest_treasurer_list  %}
 <table border="1">
 <tr><th class="center">pk</th><th class="center">使用日</th><th class="center">項目</th><th class="center">デビット</th><th class="center">クレジット</th><th class="center">金額</th></tr>
@@ -15,14 +22,14 @@
 </tr>
 {% endfor %}
 </table>
+{% else %}
+<p>No treasurers</P>
+{% endif %}
 <a href="{% url 'csvexport' %}" class="btn">csv出力</a>
 <form action="{% url 'csvimport' %}" method = 'POST' enctype = "multipart/form-data">
 {% csrf_token %}
 <input type = "file" name = "csv">
 <button type = "submit">送信</button>
 </form>
-{% else %}
-<p>No treasurers</P>
-{% endif %}
 {% endblock %}
 
